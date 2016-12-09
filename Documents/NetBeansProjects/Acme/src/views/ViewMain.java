@@ -5,6 +5,10 @@
  */
 package views;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author RoseLandjlord
@@ -16,8 +20,36 @@ public class ViewMain extends javax.swing.JFrame {
      */
     public ViewMain() {
         initComponents();
+        cerrar();
     }
 
+    public void cerrar()
+    {
+        try{
+            this.setDefaultCloseOperation(ViewMain.DO_NOTHING_ON_CLOSE);
+            addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e)
+               {
+                  confirmarSalida();
+               }
+            });
+            this.setVisible(true);
+            
+            
+        
+        
+        }catch(Exception e){}
+    
+    }
+    public void confirmarSalida()
+    {
+        int valor= JOptionPane.showConfirmDialog(this, "estas seguro que quieres cerrar la app?","Advertencia",JOptionPane.YES_NO_OPTION);
+          if(valor==JOptionPane.YES_NO_OPTION)
+          {
+              JOptionPane.showMessageDialog(null,JOptionPane.INFORMATION_MESSAGE);
+              System.exit(0);
+          }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,8 +72,7 @@ public class ViewMain extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItemVenta = new javax.swing.JMenuItem();
         jMenuItemCompras = new javax.swing.JMenuItem();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jMenuItemReporte = new javax.swing.JMenuItem();
 
         jPanel1.setBackground(new java.awt.Color(150, 191, 209));
 
@@ -52,7 +83,7 @@ public class ViewMain extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(146, Short.MAX_VALUE)
+                .addContainerGap(136, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(209, 209, 209))
         );
@@ -61,7 +92,7 @@ public class ViewMain extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(80, 80, 80)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(214, Short.MAX_VALUE))
+                .addContainerGap(205, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(0, 204, 204));
@@ -105,6 +136,9 @@ public class ViewMain extends javax.swing.JFrame {
         jMenuItemCompras.setText("Compras");
         jMenu3.add(jMenuItemCompras);
 
+        jMenuItemReporte.setText("Reportes");
+        jMenu3.add(jMenuItemReporte);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -113,11 +147,15 @@ public class ViewMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -173,6 +211,7 @@ public class ViewMain extends javax.swing.JFrame {
     public javax.swing.JMenuItem jMenuItemIniciar;
     public javax.swing.JMenuItem jMenuItemProductos;
     public javax.swing.JMenuItem jMenuItemProveed;
+    public javax.swing.JMenuItem jMenuItemReporte;
     public javax.swing.JMenuItem jMenuItemUsuario;
     public javax.swing.JMenuItem jMenuItemVenta;
     private javax.swing.JPanel jPanel1;

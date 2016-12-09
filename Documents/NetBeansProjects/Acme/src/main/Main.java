@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class Main {
     public static void main(String[]Rose)
     {
-        Object modules[] = new Object[7];
+        Object modules[] = new Object[8];
         ViewProductos viewProductos=new  ViewProductos();
         ModelProductos modelProductos= new ModelProductos();
         ControllerProducto  controllerProducto= new  ControllerProducto(modelProductos,viewProductos); 
@@ -44,6 +44,10 @@ public class Main {
         ViewProveedores viewProveedores=new ViewProveedores();
         ControllerProveedores controllerProveedores=new ControllerProveedores(modelProveedores,viewProveedores);
         
+        ModelReporte modelReporte = new ModelReporte();
+        ReportePanel reportePanel = new ReportePanel();
+        ControllerReporte controllerReporte= new ControllerReporte(modelReporte,reportePanel);
+        
         /* JPanel view[]=new JPanel[3];
                 view[0]=viewProductos;
                 view[1]=viewIniciarSecion;
@@ -55,6 +59,7 @@ public class Main {
          /*modules[4] = controllerClientes;
          modules[5] =controllerCompras;*/
          modules[6] = controllerProveedores;
+         modules[7] = controllerReporte;
     
        ViewMain viewMain= new ViewMain();
        ModelMain modelMain=new ModelMain();

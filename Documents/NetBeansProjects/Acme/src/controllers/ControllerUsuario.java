@@ -8,6 +8,10 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -70,7 +74,7 @@ public class ControllerUsuario implements ActionListener {
     }
   public void Guardar() throws NullPointerException
 {
-     
+       
         
             String respu=this.modelUsuario.Message("Desea Guardar");
                  
@@ -82,17 +86,26 @@ public class ControllerUsuario implements ActionListener {
             String contrasena=this.viewUsuario.jPassword.getText();
             this.viewUsuario.jComboBoxEstado.getSelectedItem();
             this.viewUsuario.jComboBoxNivel.getSelectedItem();
-                       
+            /*try{
+             MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(StandardCharsets.UTF_8.encode(viewLogin.jtf_password.getText()));
+            String md5_pass = String.format("%032x", new BigInteger(1, md5.digest()));
+            
+            modelLogin.setUser(viewLogin.jtf_user.getText());
+            modelLogin.setPassword(md5_pass);
+            modelLogin.login();   */       
             
              if (!nombre.equals("") && !ap_pat.equals("") && !ap_mat.equals("") && !usuario.equals("") && !contrasena.equals("") && respu=="Si")
                  {
                  
-            String sql= "insert into admin(nombre,apellido_pat,apellido_mat,usuario,contrasena,nivel,estado) values (" + "'"+nombre+"','"+ap_pat+"','"+ap_mat+"','"+usuario+"','"+contrasena+"','"+this.viewUsuario.jComboBoxNivel.getSelectedItem()+"','"+ this.viewUsuario.jComboBoxEstado.getSelectedItem()+"');";
+            String sql= "insert into admin(nombre,apellido_pat,apellido_mat,usuario,contrasena,nivel,estado) values (" + "'"+nombre+"','"+ap_pat+"','"+ap_mat+"','"+usuario+"',AES_ENCRYPT('"+contrasena+"',575),'"+this.viewUsuario.jComboBoxNivel.getSelectedItem()+"','"+ this.viewUsuario.jComboBoxEstado.getSelectedItem()+"');";
             
             System.out.println("Nombre " + nombre);
             System.out.println("SQL " + sql);
             
+            //conection.executeUpdate(sql);
             conection.executeUpdate(sql);
+            
             
            conection.executeQuery("Select * from admin");
            Primero();
@@ -108,8 +121,10 @@ public class ControllerUsuario implements ActionListener {
                     JOptionPane.showMessageDialog(null,"Operación cancelada");  
                  }
             modelUsuario.initValues();
-        
-            
+       
+          /*  } catch (NoSuchAlgorithmException ex) {
+            JOptionPane.showMessageDialog(this.viewUsuario, "Error al generar Hash");
+        }*/
 }
  public void Primero(){
        modelUsuario.moveFirst();

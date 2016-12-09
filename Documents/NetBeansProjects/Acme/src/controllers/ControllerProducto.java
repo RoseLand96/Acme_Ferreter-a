@@ -119,19 +119,19 @@ public void DesbloquearBloquear(boolean todos)
 }
 public void llenarTabla()
 {
-    String[] campos={"productos","descripción","precio_compra","precio_venta","existencia"};
-    String[] registros=new String[50];
+    String[] campos={"productos","precio compra","precio venta","existencia","descripcion"};
+    String[] registros=new String[5];
     model= new DefaultTableModel(null,campos);
     try{
          
          while(conection.moveNext())
          {
              registros[0]=conection.getString("producto");
-             registros[1]=conection.getString("descripción");
-             registros[2]=conection.getString("precio_compra");
-             registros[3]=conection.getString("precio_venta");
+             registros[1]=conection.getString("precio_compra");
+             registros[2]=conection.getString("precio_venta");
+             registros[3]=conection.getString("descripción");
              registros[4]=conection.getString("existencia");
-             model.addRow(registros);
+            model.addRow(registros);
               
          }
           this.viewProductos.jTable1.setModel(model);
@@ -140,6 +140,22 @@ public void llenarTabla()
     {
         JOptionPane.showMessageDialog(viewProductos, ex);
     }
+/*
+    model= new DefaultTableModel();
+    model.addColumn("poductos");
+    model.addColumn("descripcion");
+    model.addColumn("precio compra");
+    model.addColumn("precio venta");
+    model.addColumn("existencia");
+    this.viewProductos.jTable1.setModel(model);
+     String[] registros=new String[5];
+             registros[0]=this.viewProductos.jtfProducto.getText();
+             registros[1]=this.viewProductos.jtfPrecioC.getText();
+             registros[2]=this.viewProductos.jtfPrecioV.getText();
+             registros[3]=this.viewProductos.jtfExistencia.getText();
+             registros[4]=this.viewProductos.jTextAreaDescripción.getText();
+              model.addRow(registros);
+  */         
 }
 
 public void buscar()
@@ -215,7 +231,7 @@ public void Guardar()
                  JOptionPane.showMessageDialog(viewProductos,"Operación cancelada");
                 
                  }
-            
+            llenarTabla();
            modelProductos.initValues();
         }catch (Exception err){
             JOptionPane.showMessageDialog(this.viewProductos, "No hay producto seleccionado");
@@ -266,7 +282,7 @@ public void Guardar()
                     {
                         JOptionPane.showMessageDialog(viewProductos,"Operación cancelada");
                     }      
-
+            llenarTabla();
             modelProductos.initValues();
         }catch(Exception err){ 
             JOptionPane.showMessageDialog(null,"No hay producto seleccionado"); 
@@ -289,7 +305,7 @@ public void Guardar()
                String idproducto=this.viewProductos.jtfId.getText();
 
                conection.executeUpdate("update productos set producto='"+producto+"',descripción='"+descripción+"',precio_compra='"+precioCompra+"',precio_venta='"+precioVenta+"',existencia='"+existencia+"' where id_producto='"+idproducto+"';");
-
+                
                this.viewProductos.jtfId.setText("");
                this.viewProductos.jtfProducto.setText("");                         
 
@@ -308,7 +324,7 @@ public void Guardar()
 
                     JOptionPane.showMessageDialog(viewProductos,"Operación cancelada");
                     }
-
+         
           modelProductos.initValues();
                 //this.rs.first();   
        } catch(Exception err){ 

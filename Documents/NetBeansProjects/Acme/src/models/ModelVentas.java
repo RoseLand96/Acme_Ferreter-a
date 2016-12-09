@@ -16,6 +16,7 @@ public class ModelVentas {
     private DBConnection conection = new DBConnection(3306,"localhost", "acme", "root", "");
     private int id_venta;
     private int id_detVent;
+    private int existencia;
 
     /**
      * @return the conection
@@ -42,6 +43,7 @@ public class ModelVentas {
      * @param id_venta the id_venta to set
      */
     public void setId_venta(int id_venta) {
+        
         this.id_venta = id_venta;
     }
      public void initValues(){
@@ -56,6 +58,7 @@ public class ModelVentas {
      {
          this.id_venta=conection.getInteger("MAX(id_venta)+1");
          //this.id_detVent=conection.getInteger("MAX(id_detalle_venta)+1");
+        // this.existencia=conection.getInteger("existencia");
          
      }
 
@@ -88,6 +91,20 @@ public class ModelVentas {
      
      }
      return null;
+    }
+
+    /**
+     * @return the existencia
+     */
+    public int getExistencia() {
+        return existencia;
+    }
+
+    /**
+     * @param existencia the existencia to set
+     */
+    public void setExistencia(int existencia) {
+        this.existencia = existencia;
     }
    
     

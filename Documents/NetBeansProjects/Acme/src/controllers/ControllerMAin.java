@@ -6,6 +6,10 @@
 package controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -38,7 +42,7 @@ public class ControllerMAin implements ActionListener{
             private ModelMain modelMain;
             private ViewMain viewMain;
             //JPanel views[];
-                private Connection conexion; 
+             private Connection conexion; 
              private ResultSet rs;
              private Statement st;
             Object modules[];
@@ -50,7 +54,7 @@ public class ControllerMAin implements ActionListener{
             /*ControllerClientes controllerCliente;
             ControllerCompras controllerCompra;*/
             ControllerProveedores controllerProveedores;
-            
+            ControllerReporte controllerReporte;
             
     public ControllerMAin(ModelMain modelMain,ViewMain viewMain, /*JPanel views[]*/ Object modules[])
     {
@@ -64,6 +68,7 @@ public class ControllerMAin implements ActionListener{
           /*controllerCliente=(ControllerClientes)modules[4];
           controllerCompra=(ControllerCompras)modules[5];*/
           controllerProveedores=(ControllerProveedores)modules[6];
+          controllerReporte=(ControllerReporte)modules[7];
          //this.views=views;
          this.viewMain.jMenuItemProductos.addActionListener(this);
          this.viewMain.jMenuItemIniciar.addActionListener(this);
@@ -73,6 +78,8 @@ public class ControllerMAin implements ActionListener{
          this.viewMain.jMenuItemClientes.addActionListener(this);
          this.viewMain.jMenuItemCompras.addActionListener(this);
          this.viewMain.jMenuItemProveed.addActionListener(this);
+         this.viewMain.jMenuItemReporte.addActionListener(this);
+         
          
         
     }
@@ -87,6 +94,7 @@ public class ControllerMAin implements ActionListener{
          this.viewMain.jMenuItemClientes.setEnabled(false);
          this.viewMain.jMenuItemCompras.setEnabled(false);
          this.viewMain.jMenuItemProveed.setEnabled(false);
+         this.viewMain.jMenuItemReporte.setEnabled(false);
      
      }
      public void actionPerfomedProductos()
@@ -124,13 +132,13 @@ public class ControllerMAin implements ActionListener{
        this.viewMain.revalidate();
        this.viewMain.repaint();
     
-    }  public void actionPerfomedCliente()
+    }*/  public void actionPerfomedReporte()
     {
-       this.viewMain.setContentPane(controllerCliente.viewClientes);
+       this.viewMain.setContentPane(controllerReporte.reportePanel);
        this.viewMain.revalidate();
        this.viewMain.repaint();
     
-    }*/
+    }
     public void actionPerfomedProveedo()
     {
        this.viewMain.setContentPane(controllerProveedores.viewProveedores);
@@ -153,13 +161,26 @@ public class ControllerMAin implements ActionListener{
     {
        try{
         conexion=DriverManager.getConnection("jdbc:mysql://localhost/acme","root","");
-         String  us=this.controllerLogin.viewIniciarSecion.jtfUser.getText();
-        String pass=new String(this.controllerLogin.viewIniciarSecion.jPassword.getPassword());
-               
-        String niv="";
-        String est1="";
-        String sql="SELECT * FROM admin WHERE usuario = '"+us+"'&& contrasena='"+pass+"'";
-         
+            /*MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(StandardCharsets.UTF_8.encode(this.controllerLogin.viewIniciarSecion.jPassword.getText()));
+            String md5_pass = String.format("%032x", new BigInteger(1, md5.digest()));
+            
+            modelMain.setUser(this.controllerLogin.viewIniciarSecion.jtfUser.getText());
+            modelMain.setPassword(md5_pass);*/
+            
+            String  us=this.controllerLogin.viewIniciarSecion.jtfUser.getText();
+           String pass=new String(this.controllerLogin.viewIniciarSecion.jPassword.getPassword());
+
+           String niv="";
+           String est1="";
+           String sql="SELECT * FROM admin WHERE usuario = '"+us+"'&& contrasena='"+pass+"'";
+           //conection.prepareStatement(sql);
+           //conection.setPreparedStatement(1, us);
+           //conection.setPreparedStatement(2, pass);
+           //conection.executePreparedStatement();
+            
+            
+            
             st=conexion.createStatement();
             rs=st.executeQuery(sql);
             //conection.executeQuery(sql);
@@ -179,11 +200,12 @@ public class ControllerMAin implements ActionListener{
                       this.viewMain.jMenuItemClientes.setEnabled(true);
                       this.viewMain.jMenuItemCompras.setEnabled(true);
                       this.viewMain.jMenuItemProveed.setEnabled(true);
-                       this.controllerVenta.viewVenta.JLVendedor.setText(us);
+                      this.viewMain.jMenuItemReporte.setEnabled(true);
+                      this.controllerVenta.viewVenta.JLVendedor.setText(us);
                       this.controllerLogin.viewIniciarSecion.setVisible(false);
                       this.viewMain.setVisible(true);
-                       cerrarSesionText();
-                        fecha();
+                      cerrarSesionText();
+                      fecha();
                 
             }
             else  if(niv.equals("vendedor") && est1.equals("Activo"))
@@ -191,31 +213,34 @@ public class ControllerMAin implements ActionListener{
                 JOptionPane.showMessageDialog(null,"Bienvenido  " + us);
                       this.viewMain.jMenuItemUsuario.setEnabled(false);
                       this.viewMain.jMenuItemProductos.setEnabled(false);
-                       this.viewMain.jMenuItemClientes.setEnabled(false);
+                      this.viewMain.jMenuItemClientes.setEnabled(false);
                       this.viewMain.jMenuItemCompras.setEnabled(false);
                       this.viewMain.jMenuItemProveed.setEnabled(false);
                       this.viewMain.jMenuItemVenta.setEnabled(true);
+                      this.viewMain.jMenuItemReporte.setEnabled(true);
                       this.controllerVenta.viewVenta.JLVendedor.setText(us);
-                       this.controllerLogin.viewIniciarSecion.setVisible(false);
-                       this.viewMain.setVisible(true);
-                        cerrarSesionText();
+                      this.controllerLogin.viewIniciarSecion.setVisible(false);
+                      this.viewMain.setVisible(true);
+                      cerrarSesionText();
                       fecha();
                 
             }else if(niv.equals("administrador") && est1.equals("Desactivo"))
             {
-                 JOptionPane.showMessageDialog(null,"Esta persona esta Desactivado");
+                 JOptionPane.showMessageDialog(null,"Lo sentimos vuelve a intentar");
             }else if(niv.equals("vendedor") && est1.equals("Desactivo"))
             {
-                 JOptionPane.showMessageDialog(null,"Esta persona esta Desactivado");
+                 JOptionPane.showMessageDialog(null,"Lo sentimos, vuelve a intentar");
             }
             else
                 JOptionPane.showMessageDialog(null,"Vuelve a intentar");
             
-        }catch(SQLException err)
+        }catch(Exception err)
         {
               Logger.getLogger(ControllerMAin.class.getName()).log(Level.SEVERE, null, err);
-        } 
+            JOptionPane.showMessageDialog(null,"Vuelve a intentar");
+        }
     }
+    
         
      public void cerrarSesionText()
      {
@@ -236,6 +261,7 @@ public class ControllerMAin implements ActionListener{
          this.controllerProducto.viewProductos.setVisible(false);
          this.controllerUsuario.viewUsuario.setVisible(false);
          this.controllerVenta.viewVenta.setVisible(false);
+          this.viewMain.jMenuItemReporte.setEnabled(false);
          /*this.controllerCliente.viewClientes.setVisible(false);
          this.controllerCompra.viewCompras.setVisible(false);*/
          
@@ -277,10 +303,10 @@ public class ControllerMAin implements ActionListener{
         }else if(ae.getSource()==this.viewMain.jMenuItemProveed)
         {
             actionPerfomedProveedo();
-        }/*else if(ae.getSource()==this.viewMain.jMenuItemCompras)
+        }else if(ae.getSource()==this.viewMain.jMenuItemReporte)
         {
-            actionPerfomedCompra();
-        }else if(ae.getSource()==this.viewMain.jMenuItemClientes)
+            actionPerfomedReporte();
+        }/*else if(ae.getSource()==this.viewMain.jMenuItemClientes)
         {
             actionPerfomedCliente();
         }*/
